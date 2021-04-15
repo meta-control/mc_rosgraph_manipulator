@@ -54,6 +54,13 @@ configurations:
     command: roslaunch f3_v3_r2 f3_v3_r2.launch
   f3_v3_r3:
     command: roslaunch f3_v3_r3 f3_v3_r3.launch
+  f1_v1_r3_k:
+    command: roslaunch f1_v1_r3_k f1_v1_r3_k.launch
+  f1_v3_r1_k:
+    command: roslaunch f1_v3_r1_k f1_v3_r1_k.launch
+  f2_v1_r3_k:
+    command: roslaunch f2_v1_r3_k f2_v1_r3_k.launch
+
 
 kill_nodes: ['/move_base']
 save_action: 'move_base'
