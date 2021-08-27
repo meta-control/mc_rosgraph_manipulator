@@ -10,10 +10,10 @@ catkin_python_setup()
 catkin_package()
 
 # INSTALL
-#catkin_install_python(PROGRAMS scripts/rosgraph_manipulator_example.py
-#  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#)
+catkin_install_python(PROGRAMS src/mc_rosgraph_manipulator/rosgraph_manipulator.py
+ DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-install(DIRECTORY config 
+install(DIRECTORY config
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
