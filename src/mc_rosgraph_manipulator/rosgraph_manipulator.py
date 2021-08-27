@@ -62,7 +62,7 @@ class RosgraphManipulatorActionServer (object):
         for param, ns in params:
             try:
                 rosparam.upload_params(ns, param)
-            except ROSParamException, e:
+            except ROSParamException as e:
                 print >> sys.stderr, "ERROR: "+str(e)
                 pass  # ignore empty params
         self.reconfiguration_action_name = rospy.get_param(
