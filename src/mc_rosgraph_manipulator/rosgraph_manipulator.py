@@ -19,6 +19,8 @@ from rospy.msg import AnyMsg
 from roslib.message import get_message_class
 from pyparsing import ParseResults
 from importlib import import_module
+from std_srvs.srv import Empty, EmptyResponse
+
 
 roslib.load_manifest('rosparam')
 rospack = rospkg.RosPack()
@@ -90,6 +92,9 @@ class RosgraphManipulatorActionServer (object):
             'action_msg_type {0} - {1}'.format(action_msg_type[0],
                                                action_msg_type[1]))
 
+        self.stop_configuration_service = rospy.Service('stop_configuration',
+            Empty, self.stop_configuration)
+
         self._as = actionlib.SimpleActionServer(
             self.reconfiguration_action_name, MvpReconfigurationAction,
             execute_cb=self.reconfiguration_action_cb, auto_start=False)
@@ -104,6 +109,14 @@ class RosgraphManipulatorActionServer (object):
     def callback(self, goal_msg):
         self.last_saved_goal = goal_msg.goal
 
+    def stop_configuration(self, req):
+        for node in self.kill_nodes:
+            kill_node(node)
+            rospy.loginfo("Stopping node %s" % str(node))
+            rospy.sleep(2)
+
+        return EmptyResponse()
+
     def reconfiguration_action_cb(self, goal):
         rospy.loginfo(
             'Rosgraph Manipulator Action Server received goal %s' % str(goal))
@@ -111,10 +124,7 @@ class RosgraphManipulatorActionServer (object):
         desired_configuration = goal.desired_configuration_name
 
         if (desired_configuration in self.configurations):
-            for node in self.kill_nodes:
-                kill_node(node)
-                rospy.loginfo("Stopping node %s" % str(node))
-                rospy.sleep(2)
+            self.stop_configuration()
             rospy.loginfo('Launching new configuration')
             self.command = self.configurations.get(desired_configuration)
             rospy.loginfo('Launching new configuration, command %s' %
